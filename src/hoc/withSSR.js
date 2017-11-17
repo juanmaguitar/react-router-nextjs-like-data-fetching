@@ -1,8 +1,12 @@
 import React from 'react';
+import debug from '../utils/log'
+const log = debug('withSSR')
+
 
 // This is a Higher Order Component that abstracts duplicated data fetching
 // on the server and client.
 export default function SSR(Page) {
+
   class SSR extends React.Component {
     static getInitialData(ctx) {
       // Need to call the wrapped components getInitialData if it exists
@@ -30,23 +34,25 @@ export default function SSR(Page) {
       this.ignoreLastFetch = true;
     }
 
-    fetchData = () => {
+    fetchData = async () => {
       // if this.state.data is null, that means that the we are on the client.
       // To get the data we need, we just call getInitialData again on mount.
       if (!this.ignoreLastFetch) {
-        console.log('refetching');
+        log(`${SSR.displayName}: fetchData → refetching from the client...`);
         this.setState({ isLoading: true });
-        this.constructor.getInitialData({ match: this.props.match }).then(
-          data => {
-            this.setState({ data, isLoading: false });
-          },
-          error => {
-            this.setState(state => ({
-              data: { error },
-              isLoading: false,
-            }));
-          }
-        );
+        try {
+          const data = await this.constructor.getInitialData({ match: this.props.match })
+          this.setState(
+            { data, isLoading: false },
+            () => log(`${SSR.displayName}: fetchData → this.state → ` + JSON.stringify(this.state))
+          )
+        }
+        catch (error) {
+          this.setState(state => ({
+            data: { error },
+            isLoading: false,
+          }))
+        }
       }
     };
 

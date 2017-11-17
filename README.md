@@ -1,5 +1,7 @@
 # SSR Demo with React Router 4
 
+Original Repo tha can be found at https://github.com/jaredpalmer/razzle w/ some custom modifications
+
 ## Install
 
 Clone the repo and install deps...

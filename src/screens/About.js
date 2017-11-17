@@ -1,15 +1,14 @@
 import React from 'react';
-import withSSR from '../components/withSSR';
+import withSSR from '../hoc/withSSR';
 
 class About extends React.Component {
+
   // This works similarly to Next.js's `getInitialProps`
   static getInitialData({ match, req, res }) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve({
-          article: `
-This text is ALSO server rendered if and only if it's the initial render.
-          `,
+          article: `This text is ALSO server rendered if and only if it's the initial render.`,
           currentRoute: match.pathname,
         });
       }, 500);
@@ -21,18 +20,24 @@ This text is ALSO server rendered if and only if it's the initial render.
     return (
       <div>
         <h1>About</h1>
-        {isLoading && <div>Loading...</div>}
-        {error &&
+        {
+          isLoading && <div>Loading...</div>
+        }
+        {
+          error &&
           <div>
             {JSON.stringify(error, null, 2)}
-          </div>}
-        {article &&
+          </div>
+        }
+        {
+          article &&
           <div>
             {article}
             <div style={{ marginTop: '1rem', color: '#aaa' }}>
               {'>> '}Go to another route (Users)
             </div>
-          </div>}
+          </div>
+        }
       </div>
     );
   }

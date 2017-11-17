@@ -1,9 +1,7 @@
-import './App.css';
-
-import NavLink from 'react-router-dom/NavLink';
 import React from 'react';
-import Route from 'react-router-dom/Route';
-import Switch from 'react-router-dom/Switch';
+import { NavLink, Route, Switch } from 'react-router-dom';
+
+import './App.css';
 
 const App = ({ routes, initialData }) => {
   return routes

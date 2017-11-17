@@ -1,9 +1,9 @@
-import Link from 'react-router-dom/Link';
 import React from 'react';
-import Route from 'react-router-dom/Route';
+import { Link, Route } from 'react-router-dom';
+
 import UserDetail from './UserDetail';
 import HttpStatus from '../components/HttpStatus';
-import withSSR from '../components/withSSR';
+import withSSR from '../hoc/withSSR';
 
 const friends = [
   { id: '12342', name: 'Brent' },
@@ -11,6 +11,7 @@ const friends = [
 ];
 
 class Users extends React.Component {
+
   static getInitialData({ match, req, res }) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -54,12 +55,12 @@ class Users extends React.Component {
         <Route
           path="/users/:id"
           exact
-          render={props =>
+          render={ routeProps =>
             <UserDetail
-              {...props}
+              { ...routeProps }
               person={
                 hasFriends &&
-                this.props.friends.find(p => p.id === props.match.params.id)
+                this.props.friends.find(p => p.id === routeProps.match.params.id)
               }
             />}
         />
@@ -71,7 +72,8 @@ class Users extends React.Component {
             return (
               <div>
                 <h1>Users</h1>
-                {hasFriends &&
+                {
+                  hasFriends &&
                   this.props.friends.map(t =>
                     <Link
                       key={t.id}
@@ -80,7 +82,8 @@ class Users extends React.Component {
                     >
                       {t.name}
                     </Link>
-                  )}
+                  )
+                }
                 <Link
                   key="404"
                   to={`/users/asdf;lkjasdf`}
